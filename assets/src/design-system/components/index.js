@@ -17,6 +17,6 @@
 export * from './button';
 export { Modal } from './modal';
 export { Pill } from './pill';
-export * as Snackbar from './snackbar';
+export { Snackbar } from './snackbar';
 export { Text, Display, Headline } from './typography';
 export { Dialog } from './dialog';
