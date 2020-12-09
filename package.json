@@ -105,6 +105,7 @@
     "@wordpress/babel-plugin-import-jsx-pragma": "^2.7.0",
     "@wordpress/dependency-extraction-webpack-plugin": "^2.8.0",
     "@wordpress/e2e-test-utils": "^4.15.0",
+    "@wordpress/env": "^2.1.0",
     "@wordpress/eslint-plugin": "^7.3.0",
     "@wordpress/jest-console": "^3.9.0",
     "@wordpress/jest-puppeteer-axe": "^1.10.0",
@@ -206,8 +207,8 @@
     "lint:js": "eslint --ext .js,.cjs,.md .",
     "lint:js:fix": "npm run lint:js -- --fix",
     "lint:js:report": "eslint --ext .js,.cjs,.md --output-file build/lint-js-report.json --format json .",
-    "lint:php": "composer phpcs",
-    "lint:php:fix": "composer phpcbf",
+    "lint:php": "npm run wp-env run composer run-script lint",
+    "lint:php:fix": "npm run wp-env run composer run-script format",
     "lint:phpstan": "composer phpstan",
     "lint:phpmd": "composer phpmd",
     "lint:md": "markdownlint .",
@@ -229,9 +230,9 @@
     "test:karma:dashboard": "karma start karma-dashboard.config.cjs --single-run",
     "test:karma:dashboard:retry-failed": "karma start karma-dashboard.config.cjs --single-run --retry-failed",
     "test:karma:dashboard:watch": "karma start karma-dashboard.config.cjs --debug",
-    "test:php": "vendor/bin/phpunit",
-    "test:php:multisite": "vendor/bin/phpunit -c phpunit-multisite.xml.dist",
-    "test:php:help": "npm run test:php -- --help",
+    "test:php": "wp-env run phpunit 'phpunit -c /var/www/html/wp-content/plugins/web-stories/phpunit.xml.dist'",
+    "test:php:multisite": "wp-env run phpunit 'phpunit -c /var/www/html/wp-content/plugins/web-stories/phpunit-multisite.xml.dist'",
+    "test:php:help": "wp-env run phpunit 'phpunit -c /var/www/html/wp-content/plugins/web-stories/phpunit.xml.dist --help'",
     "test:e2e": "JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs jest --runInBand --config=tests/e2e/jest.config.js",
     "test:e2e:help": "npm run test:e2e -- --help",
     "test:e2e:percy": "percy exec --config=percy.config.yml -- npm run test:e2e",
@@ -245,7 +246,8 @@
     "workflow:version": "./bin/commander.js version",
     "workflow:build-plugin": "./bin/commander.js build-plugin",
     "workflow:fonts": "./bin/commander.js build-fonts",
-    "workflow:templates": "./bin/commander.js update-templates"
+    "workflow:templates": "./bin/commander.js update-templates",
+    "wp-env": "wp-env"
   },
   "husky": {
     "hooks": {

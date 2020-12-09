@@ -11,16 +11,6 @@ jobs:
   unit-php:
     name: 'PHP ${{ matrix.php }} - WP ${{ matrix.wp }}'
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mariadb:latest
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
-          MYSQL_ROOT_PASSWORD:
-          MYSQL_DATABASE: wordpress_test
-        ports:
-          - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     continue-on-error: ${{ matrix.experimental == true }}
     strategy:
       matrix:
@@ -73,49 +63,25 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
-          tools: composer:v1
+          tools: cs2pr
 
       - name: Install prefixed dependencies
-        run: |
-          composer install --prefer-dist --no-suggest --no-progress --no-interaction
-          rm -rf vendor/*
+        run: wp-env run composer 'install --prefer-dist --no-suggest --no-progress --no-interaction'
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: mysql
-          coverage: xdebug
-          tools: composer:v1, cs2pr
+      - name: Start Docker environment
+        run: npm run wp-env start
+        env:
+#          WP_VERSION: ${{ matrix.wp }}
+          WP_ENV_PHP_VERSION: ${{ matrix.php }}
 
-      - name: Install dependencies
-        run: |
-          composer install --prefer-dist --no-suggest --no-progress --no-interaction --no-scripts
-          composer dump-autoload --no-interaction
-
-      - name: Shutdown default MySQL service
-        run: sudo service mysql stop
-
-      - name: Verify MariaDB connection
-        run: |
-          while ! mysqladmin ping -h"127.0.0.1" -P"${{ job.services.mysql.ports[3306] }}" --silent; do
-            sleep 1
-          done
-
-      - name: Set up tests
-        run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1:${{ job.services.mysql.ports['3306'] }} ${{ matrix.wp }} true
+      - name: Enable Xdebug
+        run: npm run wp-env start --update --xdebug
+        if: ${{ matrix.coverage }}
 
       - name: Run tests
         run: |
-          npm run test:php
-          npm run test:php:multisite
-        if: ${{ ! matrix.coverage }}
-
-      - name: Run tests with coverage
-        run: |
           npm run test:php -- --coverage-clover build/logs/php-coverage.xml
           npm run test:php -- --coverage-clover build/logs/php-coverage-multisite.xml -c phpunit-multisite.xml.dist
-        if: ${{ matrix.coverage }}
 
       - name: Upload code coverage report
         uses: codecov/codecov-action@v1
