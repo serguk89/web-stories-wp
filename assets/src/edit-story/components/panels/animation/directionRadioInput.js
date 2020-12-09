@@ -66,7 +66,7 @@ const Svg = styled.svg`
 `;
 
 const Icon = styled.div`
-  padding: 6px;
+  padding: 4px;
   border-radius: 4px;
   stroke: #e4e5e6;
   stroke-width: 1px;
@@ -276,6 +276,25 @@ const getPostfixFromCamelCase = (camelCase = '') => {
   return split[split.length - 1];
 };
 
+const STANDARD_NAV_ORDER = [
+  DIRECTION.TOP_TO_BOTTOM,
+  DIRECTION.RIGHT_TO_LEFT,
+  DIRECTION.BOTTOM_TO_TOP,
+  DIRECTION.LEFT_TO_RIGHT,
+];
+
+const SCALE_NAV_ORDER = [
+  SCALE_DIRECTION.SCALE_IN_TOP_LEFT,
+  SCALE_DIRECTION.SCALE_OUT_TOP_RIGHT,
+  SCALE_DIRECTION.SCALE_IN_BOTTOM_RIGHT,
+  SCALE_DIRECTION.SCALE_OUT_BOTTOM_LEFT,
+];
+
+const sortInputOrder = (directions, directionOrder = STANDARD_NAV_ORDER) =>
+  directions.sort(
+    (a, b) => directionOrder.indexOf(a) - directionOrder.indexOf(b)
+  );
+
 export const DirectionRadioInput = ({
   value,
   directions = [],
@@ -291,19 +310,14 @@ export const DirectionRadioInput = ({
       !directions.includes(SCALE_DIRECTION.SCALE_OUT) &&
       !directions.includes(SCALE_DIRECTION.SCALE_IN)
     ) {
-      dir.push(...directions);
+      dir.push(...sortInputOrder(directions));
     } else {
-      // Controlling order these get added to flattenedDirections makes sure the indexable order makes sense for keyboard users
+      const scaleDir = [];
       directions.includes(SCALE_DIRECTION.SCALE_OUT) &&
-        dir.push(
-          SCALE_DIRECTION_MAP.SCALE_OUT[0],
-          SCALE_DIRECTION_MAP.SCALE_OUT[1]
-        );
+        scaleDir.push(...SCALE_DIRECTION_MAP.SCALE_OUT);
       directions.includes(SCALE_DIRECTION.SCALE_IN) &&
-        dir.push(
-          SCALE_DIRECTION_MAP.SCALE_IN[0],
-          SCALE_DIRECTION_MAP.SCALE_IN[1]
-        );
+        scaleDir.push(...SCALE_DIRECTION_MAP.SCALE_IN);
+      dir.push(...sortInputOrder(scaleDir, SCALE_NAV_ORDER));
     }
     return dir;
   }, [directions]);
