@@ -90,7 +90,7 @@ jobs:
       - name: Start Docker environment
         run: |
           npm run wp-env start
-          npm run wp-env run tests-cli "wp rewrite structure '/%postname%/'"
+          npm run wp-env run tests-cli "wp rewrite structure '/%postname%'"
           npm run wp-env run tests-cli "wp plugin deactivate --all"
           npm run wp-env run tests-cli "wp plugin activate web-stories"
         env:
