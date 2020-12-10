@@ -38,16 +38,16 @@ jobs:
         run: composer --no-interaction validate --no-check-all
 
       - name: Install dependencies
-        run: wp-env run composer 'install --prefer-dist --no-suggest --no-progress --no-interaction'
+        run: npm run wp-env run composer 'install --prefer-dist --no-suggest --no-progress --no-interaction'
 
       - name: Detect coding standard violations (PHPCS)
-        run: wp-env run composer run-script lint -- -q --report=checkstyle --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 | cs2pr --graceful-warnings
+        run: npm run wp-env run composer run-script lint -- -q --report=checkstyle --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 | cs2pr --graceful-warnings
 
       - name: Static Analysis (PHPStan)
-        run: wp-env run composer run-script phpstan -- --error-format=checkstyle | cs2pr
+        run: npm run wp-env run composer run-script phpstan -- --error-format=checkstyle | cs2pr
 
       - name: Static Analysis (PHPMD)
-        run: wp-env run composer run-script phpmd
+        run: npm run wp-env run composer run-script phpmd
 
       - name: Normalize composer.json
-        run: wp-env run composer run-script composer-normalize --no-interaction -- --dry-run
+        run: npm run wp-env run composer run-script composer-normalize --no-interaction -- --dry-run
