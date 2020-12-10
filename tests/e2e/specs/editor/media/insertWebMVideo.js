@@ -46,7 +46,7 @@ describe('Inserting WebM Video', () => {
 
     await expect(page).toClick('button', { text: 'Media Library' });
     await clickButton(
-      '.attachments-browser .attachments .attachment[aria-label="small-video"]'
+      '.attachments-browser .attachments .attachment[aria-label="lego-webm-video"]'
     );
     await expect(page).toClick('button', { text: 'Insert into page' });
 
