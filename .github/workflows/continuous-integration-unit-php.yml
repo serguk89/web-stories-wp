@@ -93,7 +93,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
-          tools: cs2pr
+          tools: composer:v1, cs2pr
 
         # TODO: Use `npm run wp-env run composer` once using Composer 2.
       - name: Install prefixed dependencies
