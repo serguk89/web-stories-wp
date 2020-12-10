@@ -4,6 +4,7 @@
   "plugins": [
     "https://downloads.wordpress.org/plugin/rtl-tester.zip",
     "https://downloads.wordpress.org/plugin/amp.zip",
+    "https://downloads.wordpress.org/plugin/classic-editor.zip",
     "https://downloads.wordpress.org/plugin/gutenberg.zip"
   ],
   "mappings": {
