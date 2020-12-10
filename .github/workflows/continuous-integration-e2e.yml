@@ -16,7 +16,7 @@ jobs:
         # TODO: add back Firefox once support is more mature.
         include:
           - browser: 'chrome'
-            wp: 'latest'
+            wp: '5.6'
             coverage: true
           - browser: 'chrome'
             wp: '5.3.4'
@@ -87,15 +87,19 @@ jobs:
           # TODO: remove eventually
           DISABLE_PREVENT: true
 
+      - name: Configure WordPress version
+        run: echo "{\"core\":\"WordPress/WordPress#${WP_VERSION:-master}\"}" >> .wp-env.override.json
+        env:
+          WP_VERSION: ${{ matrix.wp }}
+
       - name: Start Docker environment
         run: |
-          npm run wp-env start
+          npm run env:start
           npm run wp-env run tests-cli "wp rewrite structure '/%postname%'"
           npm run wp-env run tests-cli "wp plugin deactivate --all"
           npm run wp-env run tests-cli "wp plugin activate web-stories"
         env:
           COMPOSE_INTERACTIVE_NO_CLI: true
-          WP_VERSION: ${{ matrix.wp }}
 
       - name: Run E2E tests with percy
         run: npm run test:e2e:percy
@@ -109,7 +113,7 @@ jobs:
         if: ${{ ! matrix.coverage }}
 
       - name: Stop Docker environment
-        run: npm run wp-env stop
+        run: npm run env:stop
         if: always()
         env:
           COMPOSE_INTERACTIVE_NO_CLI: true

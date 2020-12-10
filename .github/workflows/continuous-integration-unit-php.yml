@@ -99,7 +99,7 @@ jobs:
           WP_VERSION: ${{ matrix.wp }}
 
       - name: Start Docker environment
-        run: npm run wp-env start
+        run: npm run env:start
         env:
           WP_ENV_PHP_VERSION: ${{ matrix.php }}
 
