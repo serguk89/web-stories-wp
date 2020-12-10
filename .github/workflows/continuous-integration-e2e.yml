@@ -90,7 +90,7 @@ jobs:
       - name: Start Docker environment
         run: |
           npm run wp-env start
-          npm run wp-env run cli wp plugin activate web-stories
+          npm run wp-env run tests-cli wp plugin activate web-stories
         env:
           COMPOSE_INTERACTIVE_NO_CLI: true
           WP_VERSION: ${{ matrix.wp }}
