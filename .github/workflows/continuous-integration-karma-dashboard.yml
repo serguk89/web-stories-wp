@@ -14,6 +14,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+        # See https://github.com/WordPress/gutenberg/issues/22398
+      - name: Install libkrb5-dev
+        run: sudo apt-get install libkrb5-dev
+
       - name: Read .nvmrc
         run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
         id: nvm

@@ -95,8 +95,9 @@ jobs:
           php-version: 7.4
           tools: cs2pr
 
+        # TODO: Use `npm run wp-env run composer` once using Composer 2.
       - name: Install prefixed dependencies
-        run: npm run wp-env run composer 'install --prefer-dist --no-suggest --no-progress --no-interaction'
+        run: composer install --prefer-dist --no-suggest --no-progress --no-interaction
 
       - name: Configure WordPress version
         run: echo "{\"core\":\"WordPress/WordPress#${WP_VERSION:-master}\"}" >> .wp-env.override.json

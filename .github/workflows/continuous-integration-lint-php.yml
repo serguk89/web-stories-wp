@@ -67,8 +67,9 @@ jobs:
       - name: Validate composer.json
         run: composer --no-interaction validate --no-check-all
 
+        # TODO: Use `npm run wp-env run composer` once using Composer 2.
       - name: Install dependencies
-        run: npm run wp-env run composer 'install --prefer-dist --no-suggest --no-progress --no-interaction'
+        run: composer install --prefer-dist --no-suggest --no-progress --no-interaction
 
       - name: Detect coding standard violations (PHPCS)
         run: npm run wp-env run composer run-script lint -- -q --report=checkstyle --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 | cs2pr --graceful-warnings
