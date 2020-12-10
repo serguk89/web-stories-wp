@@ -1,6 +1,9 @@
 {
   "port": 8898,
   "testsPort": 8899,
+  "config": {
+    "WEBSTORIES_DEV_MODE": true
+  },
   "plugins": [
     "https://downloads.wordpress.org/plugin/rtl-tester.zip",
     "https://downloads.wordpress.org/plugin/amp.zip",
