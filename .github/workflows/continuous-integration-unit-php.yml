@@ -98,6 +98,7 @@ jobs:
         run: |
           if [[ $WP_VERSION != 'latest' ]]; then
             echo "{\"core\":\"WordPress/WordPress#${WP_VERSION:-master}\"}" >> .wp-env.override.json
+            composer require --prefer-dist --no-suggest --no-progress --no-interaction --no-update --dev wp-phpunit/wp-phpunit:${WP_VERSION:-master}
           fi
         env:
           WP_VERSION: ${{ matrix.wp }}
