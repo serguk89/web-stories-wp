@@ -95,7 +95,10 @@ jobs:
         run: composer install --prefer-dist --no-suggest --no-progress --no-interaction
 
       - name: Configure WordPress version
-        run: echo "{\"core\":\"WordPress/WordPress#${WP_VERSION:-master}\"}" >> .wp-env.override.json
+        run: |
+          if [[ $WP_VERSION != 'latest' ]]; then
+            echo "{\"core\":\"WordPress/WordPress#${WP_VERSION:-master}\"}" >> .wp-env.override.json
+          fi
         env:
           WP_VERSION: ${{ matrix.wp }}
 
