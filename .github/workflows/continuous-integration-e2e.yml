@@ -18,8 +18,9 @@ jobs:
           - browser: 'chrome'
             wp: '5.6'
             coverage: true
+
           - browser: 'chrome'
-            wp: '5.3.4'
+            wp: '5.3'
             coverage: false
 
     steps:
