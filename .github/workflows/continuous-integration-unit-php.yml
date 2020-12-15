@@ -108,7 +108,7 @@ jobs:
           WP_ENV_PHP_VERSION: ${{ matrix.php }}
 
       - name: Enable Xdebug
-        run: npm run wp-env start --update --xdebug
+        run: npm run wp-env start -- --update --xdebug
         if: ${{ matrix.coverage }}
 
       # 1. Installs PHPUnit 7.5 and patches it to run on PHP 8.
