@@ -16,7 +16,7 @@ jobs:
         # TODO: add back Firefox once support is more mature.
         include:
           - browser: 'chrome'
-            wp: '5.6'
+            wp: 'latest'
             coverage: true
 
           - browser: 'chrome'
