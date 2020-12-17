@@ -69,8 +69,8 @@ jobs:
 
       - name: Detect coding standard violations (PHPCS)
         run: |
-          composer lint -- -q --report=checkstyle --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1
-          composer lint
+          composer lint -- --version
+          composer lint -- -v
 
       - name: Static Analysis (PHPStan)
         run: composer phpstan -- --error-format=checkstyle | cs2pr
