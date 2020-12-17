@@ -92,12 +92,14 @@ jobs:
         env:
           WP_VERSION: ${{ matrix.wp }}
 
+        # TODO: Move WP-CLI commands to prepare script, e.g. `npm pretest:e2e`
       - name: Start Docker environment
         run: |
           npm run env:start
           npm run wp-env run tests-cli "wp rewrite structure '/%postname%'"
           npm run wp-env run tests-cli "wp plugin deactivate --all"
           npm run wp-env run tests-cli "wp plugin activate web-stories"
+          npm run wp-env run tests-cli "wp user create author author@example.com --role=author --user_pass=password --quiet"
         env:
           COMPOSE_INTERACTIVE_NO_CLI: true
 
