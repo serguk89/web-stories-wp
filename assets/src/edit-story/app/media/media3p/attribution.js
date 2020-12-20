@@ -31,6 +31,7 @@ import { rgba } from 'polished';
 import { ReactComponent as UnsplashLogoFull } from '../../../icons/unsplash_logo_full.svg';
 import { ReactComponent as CoverrLogoFull } from '../../../icons/coverr_logo.svg';
 import { ReactComponent as TenorLogoFull } from '../../../icons/tenor_logo_white.svg';
+import { TranslateWithMarkup } from '../../../../i18n';
 
 const AttributionPill = styled.div`
   position: absolute;
@@ -81,8 +82,13 @@ export function UnsplashAttribution() {
   return (
     <a href={unsplashUrl} target={'_blank'} rel={'noreferrer'}>
       <AttributionPill>
-        {__('Powered by', 'web-stories')}
-        <UnsplashLogo />
+        <TranslateWithMarkup
+          mapping={{
+            provider: <UnsplashLogo />,
+          }}
+        >
+          {__('Powered by <provider />', 'web-stories')}
+        </TranslateWithMarkup>
       </AttributionPill>
     </a>
   );
@@ -92,8 +98,13 @@ export function CoverrAttribution() {
   return (
     <a href={coverrUrl} target={'_blank'} rel={'noreferrer'}>
       <AttributionPill>
-        {__('Powered by', 'web-stories')}
-        <CoverrLogo />
+        <TranslateWithMarkup
+          mapping={{
+            provider: <CoverrLogo />,
+          }}
+        >
+          {__('Powered by <provider />', 'web-stories')}
+        </TranslateWithMarkup>
       </AttributionPill>
     </a>
   );
