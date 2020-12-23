@@ -24,6 +24,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const CopyPlugin = require('copy-webpack-plugin');
 
 /**
  * WordPress dependencies
@@ -150,6 +151,14 @@ const storiesEditor = {
   },
   plugins: [
     ...sharedConfig.plugins,
+    new CopyPlugin({
+      patterns: [
+        {
+          from: './node_modules/@ffmpeg/core/dist/**/*',
+          to: '[name].[ext]',
+        },
+      ],
+    }),
     new WebpackBar({
       name: 'Stories Editor',
       color: '#fddb33',

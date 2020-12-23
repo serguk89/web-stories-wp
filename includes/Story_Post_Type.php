@@ -557,6 +557,7 @@ class Story_Post_Type {
 				'version'          => WEBSTORIES_VERSION,
 				'encodeMarkup'     => $this->decoder->supports_decoding(),
 				'metaBoxes'        => $this->meta_boxes->get_meta_boxes_per_location(),
+				'ffmpegCoreUrl'    => WEBSTORIES_PLUGIN_DIR_URL . 'assets/js/ffmpeg-core.js',
 			],
 			'flags'      => array_merge(
 				$this->experiments->get_experiment_statuses( 'general' ),

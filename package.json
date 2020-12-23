@@ -29,6 +29,8 @@
   },
   "dependencies": {
     "@ap.cx/hues": "^2.4.0",
+    "@ffmpeg/core": "^0.8.5",
+    "@ffmpeg/ffmpeg": "^0.9.6",
     "@wordpress/api-fetch": "^3.21.0",
     "@wordpress/block-editor": "^5.2.0",
     "@wordpress/blocks": "^6.25.0",
@@ -117,6 +119,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "browserslist": "^4.16.0",
     "commander": "^6.2.1",
+    "copy-webpack-plugin": "^6.4.1",
     "core-js": "^3.7.0",
     "css-loader": "^5.0.1",
     "cssnano": "^4.1.10",
