@@ -89,10 +89,21 @@ jobs:
           # TODO: remove eventually
           DISABLE_PREVENT: true
 
+        # TODO: Remove "latest" special case. See https://github.com/WordPress/gutenberg/issues/27763
       - name: Configure WordPress version
         run: |
           if [[ $WP_VERSION != 'latest' ]]; then
             echo "{\"core\":\"WordPress/WordPress#${WP_VERSION:-master}\"}" >> .wp-env.override.json
+          fi
+          if [[ $WP_VERSION == 'latest' ]]; then
+            curl -s http://api.wordpress.org/core/version-check/1.7/ > /tmp/wp-latest.json
+            grep '[0-9]+\.[0-9]+(\.[0-9]+)?' /tmp/wp-latest.json
+          	LATEST_VERSION=$(grep -o '"version":"[^"]*' /tmp/wp-latest.json | sed 's/"version":"//')
+          	if [[ -z "$LATEST_VERSION" ]]; then
+          		echo "Latest WordPress version could not be found"
+          		exit 1
+          	fi
+            echo "{\"core\":\"WordPress/WordPress#${LATEST_VERSION}\"}" >> .wp-env.override.json
           fi
         env:
           WP_VERSION: ${{ matrix.wp }}
