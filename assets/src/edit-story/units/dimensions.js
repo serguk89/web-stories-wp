@@ -115,6 +115,11 @@ export function editorToDataY(y, pageHeight, withRounding = true) {
   return dataPixels(v);
 }
 
+const INHERENT_PADDING = {
+  x: 6,
+  y: 4,
+};
+
 /**
  * Converts the element's position, width, and rotation) to the "box" in the
  * "editor" coordinate space.
@@ -132,10 +137,19 @@ export function getBox(
   pageHeight
 ) {
   return {
-    x: dataToEditorX(isBackground ? 0 : x, pageWidth),
-    y: dataToEditorY(isBackground ? -DANGER_ZONE_HEIGHT : y, pageHeight),
-    width: dataToEditorX(isBackground ? PAGE_WIDTH : width, pageWidth),
-    height: dataToEditorY(isBackground ? FULLBLEED_HEIGHT : height, pageHeight),
+    x: dataToEditorX(isBackground ? 0 : x - INHERENT_PADDING.x, pageWidth),
+    y: dataToEditorY(
+      isBackground ? -DANGER_ZONE_HEIGHT : y - INHERENT_PADDING.y,
+      pageHeight
+    ),
+    width: dataToEditorX(
+      isBackground ? PAGE_WIDTH : width + INHERENT_PADDING.x * 2,
+      pageWidth
+    ),
+    height: dataToEditorY(
+      isBackground ? FULLBLEED_HEIGHT : height + INHERENT_PADDING.y * 2,
+      pageHeight
+    ),
     rotationAngle: isBackground ? 0 : rotationAngle,
   };
 }
