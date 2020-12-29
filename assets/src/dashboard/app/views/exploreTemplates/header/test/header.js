@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { fireEvent } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 
 /**
  * Internal dependencies
@@ -68,6 +68,13 @@ const fakeTemplates = [
 ];
 
 describe('Explore Templates <Header />', function () {
+  // Mock scrollTo
+  const scrollTo = jest.fn();
+  Object.defineProperty(window.Element.prototype, 'scrollTo', {
+    writable: true,
+    value: scrollTo,
+  });
+
   it('should have results label that says "Viewing all templates" on initial page view', function () {
     const { getByText } = renderWithProviders(
       <LayoutProvider>
@@ -145,9 +152,9 @@ describe('Explore Templates <Header />', function () {
     expect(setKeywordFn).toHaveBeenCalledWith('Hermione Granger');
   });
 
-  it('should call the set sort function when a new sort is selected', function () {
+  it('should call the set sort function when a new sort is selected', async function () {
     const setSortFn = jest.fn();
-    const { getAllByText, getByText } = renderWithProviders(
+    const { getByRole, getByText, getByLabelText } = renderWithProviders(
       <LayoutProvider>
         <Header
           filter={{ value: TEMPLATES_GALLERY_STATUS.ALL }}
@@ -166,7 +173,17 @@ describe('Explore Templates <Header />', function () {
       </LayoutProvider>,
       { features: { enableInProgressTemplateActions: true } }
     );
-    fireEvent.click(getAllByText('Popular')[0].parentElement);
+
+    const SortButton = getByLabelText('Choose sort option for display');
+
+    fireEvent.click(SortButton);
+
+    const menu = getByRole('listbox');
+
+    await waitFor(() => {
+      expect(menu).toBeInTheDocument();
+    });
+
     fireEvent.click(getByText('Recent'));
 
     expect(setSortFn).toHaveBeenCalledWith('recent');

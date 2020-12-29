@@ -30,13 +30,14 @@ import PropTypes from 'prop-types';
  * Internal dependencies
  */
 import { trackClick } from '../../../../tracking';
+import { DropDown } from '../../../../design-system';
 import {
-  Dropdown,
   StandardViewContentGutter,
   ViewStyleBar,
   TypographyPresets,
 } from '../../../components';
-import { DROPDOWN_TYPES, VIEW_STYLE } from '../../../constants';
+import { VIEW_STYLE } from '../../../constants';
+import { useConfig } from '../../config';
 
 const DisplayFormatContainer = styled.div`
   height: ${({ theme }) => theme.DEPRECATED_THEME.formatContainer.height}px;
@@ -51,7 +52,7 @@ const StorySortDropdownContainer = styled.div`
   align-self: flex-end;
 `;
 
-const SortDropdown = styled(Dropdown)`
+const SortDropdown = styled(DropDown)`
   min-width: 210px;
 `;
 
@@ -87,6 +88,8 @@ export default function BodyViewOptions({
   sortDropdownAriaLabel,
   wpListURL,
 }) {
+  const { isRTL } = useConfig();
+
   const handleClassicListViewClick = useCallback(
     (evt) => {
       trackClick(evt, 'open_classic_list_view', 'dashboard', wpListURL);
@@ -102,12 +105,12 @@ export default function BodyViewOptions({
           {layoutStyle === VIEW_STYLE.GRID && showSortDropdown && (
             <StorySortDropdownContainer>
               <SortDropdown
-                alignment="flex-end"
+                isRTL={isRTL}
                 ariaLabel={sortDropdownAriaLabel}
-                items={pageSortOptions}
-                type={DROPDOWN_TYPES.MENU}
-                value={currentSort}
-                onChange={(newSort) => handleSortChange(newSort.value)}
+                options={pageSortOptions}
+                selectedValue={currentSort}
+                popupZIndex={4}
+                onMenuItemClick={(_, newSort) => handleSortChange(newSort)}
               />
             </StorySortDropdownContainer>
           )}

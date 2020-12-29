@@ -32,7 +32,14 @@ import LayoutProvider from '../../../../../components/layout/provider';
 import { renderWithProviders } from '../../../../../testUtils';
 import Header from '../';
 
-describe('My Stories <Header />', function () {
+describe('Saved Templates <Header />', function () {
+  // Mock scrollTo
+  const scrollTo = jest.fn();
+  Object.defineProperty(window.Element.prototype, 'scrollTo', {
+    writable: true,
+    value: scrollTo,
+  });
+
   it('should have results label that says "Viewing all templates" on initial page view', function () {
     const { getByText } = renderWithProviders(
       <LayoutProvider>
@@ -53,7 +60,7 @@ describe('My Stories <Header />', function () {
 
   it('should call the set sort function when a new sort is selected', async function () {
     const setSortFn = jest.fn();
-    const { getAllByText, getByText } = renderWithProviders(
+    const { getByRole, getByText, getByLabelText } = renderWithProviders(
       <LayoutProvider>
         <Header
           filter={SAVED_TEMPLATES_STATUSES[0]}
@@ -67,11 +74,20 @@ describe('My Stories <Header />', function () {
         />
       </LayoutProvider>
     );
-    fireEvent.click(getAllByText('Last modified')[0].parentElement);
+
+    const SortButton = getByLabelText('Choose sort option for display');
+    fireEvent.click(SortButton);
+
+    const menu = getByRole('listbox');
+
+    await waitFor(() => {
+      expect(menu).toBeInTheDocument();
+    });
+
     fireEvent.click(getByText('Date created'));
 
     await waitFor(() => {
-      expect(setSortFn).toHaveBeenCalledWith('modified');
+      expect(setSortFn).toHaveBeenCalledWith('date');
     });
   });
 });

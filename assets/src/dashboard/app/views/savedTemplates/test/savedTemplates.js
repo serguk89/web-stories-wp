@@ -41,10 +41,16 @@ describe('<SavedTemplates />', function () {
   afterEach(() => {
     jest.resetAllMocks();
   });
+  // Mock scrollTo
+  const scrollTo = jest.fn();
+  Object.defineProperty(window.Element.prototype, 'scrollTo', {
+    writable: true,
+    value: scrollTo,
+  });
 
   it('should call the set sort function when a new sort is selected', async function () {
     const setSortFn = jest.fn();
-    const { getAllByText, getByText } = renderWithProviders(
+    const { getByRole, getByText, getByLabelText } = renderWithProviders(
       <LayoutProvider>
         <SavedTemplatesHeader
           filter={{ value: SAVED_TEMPLATES_STATUSES.ALL }}
@@ -59,11 +65,20 @@ describe('<SavedTemplates />', function () {
       </LayoutProvider>,
       { features: { enableInProgressStoryActions: false } }
     );
-    fireEvent.click(getAllByText('Last modified')[0].parentElement);
+
+    const SortButton = getByLabelText('Choose sort option for display');
+    fireEvent.click(SortButton);
+
+    const menu = getByRole('listbox');
+
+    await waitFor(() => {
+      expect(menu).toBeInTheDocument();
+    });
+
     fireEvent.click(getByText('Date created'));
 
     await waitFor(() => {
-      expect(setSortFn).toHaveBeenCalledWith('modified');
+      expect(setSortFn).toHaveBeenCalledWith('date');
     });
   });
 

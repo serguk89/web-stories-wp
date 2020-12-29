@@ -63,6 +63,13 @@ const fakeStories = [
 ];
 
 describe('My Stories <Header />', function () {
+  // Mock scrollTo
+  const scrollTo = jest.fn();
+  Object.defineProperty(window.Element.prototype, 'scrollTo', {
+    writable: true,
+    value: scrollTo,
+  });
+
   it('should have results label that says "Viewing all stories" on initial page view', function () {
     const { getByText } = renderWithProviders(
       <LayoutProvider>
@@ -194,7 +201,7 @@ describe('My Stories <Header />', function () {
 
   it('should call the set sort function when a new sort is selected', async function () {
     const setSortFn = jest.fn();
-    const { getAllByText, getByText } = renderWithProviders(
+    const { getByText, getByRole, getByLabelText } = renderWithProviders(
       <LayoutProvider>
         <Header
           filter={STORY_STATUSES[0]}
@@ -214,7 +221,16 @@ describe('My Stories <Header />', function () {
         />
       </LayoutProvider>
     );
-    fireEvent.click(getAllByText('Created by')[0].parentElement);
+
+    const SortButton = getByLabelText('Choose sort option for display');
+    fireEvent.click(SortButton);
+
+    const menu = getByRole('listbox');
+
+    await waitFor(() => {
+      expect(menu).toBeInTheDocument();
+    });
+
     fireEvent.click(getByText('Last modified'));
 
     await waitFor(() => {
