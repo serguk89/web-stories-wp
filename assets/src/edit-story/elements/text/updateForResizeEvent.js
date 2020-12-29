@@ -21,6 +21,10 @@ import {
   calculateFitTextFontSize,
   calculateTextHeight,
 } from '../../utils/textMeasurements';
+import {
+  BACKGROUND_TEXT_MODE,
+  FILL_TEXT_INHERENT_PADDING,
+} from '../../constants';
 import { dataPixels } from '../../units';
 
 function updateForResizeEvent(element, direction, newWidth, newHeight) {
@@ -29,10 +33,17 @@ function updateForResizeEvent(element, direction, newWidth, newHeight) {
 
   // Vertical or diagonal resizing w/keep ratio.
   if (isResizingHeight) {
+    const isBgFill = element?.backgroundTextMode === BACKGROUND_TEXT_MODE.FILL;
+    const width = isBgFill
+      ? newWidth - FILL_TEXT_INHERENT_PADDING.x * 2
+      : newWidth;
+    const height = isBgFill
+      ? newHeight - FILL_TEXT_INHERENT_PADDING.y * 2
+      : newHeight;
     const { fontSize, marginOffset } = calculateFitTextFontSize(
       element,
-      newWidth || element.width,
-      newHeight
+      width || element.width,
+      height
     );
 
     return {

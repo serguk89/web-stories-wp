@@ -36,6 +36,7 @@ import { useUnits } from '../../units';
 import generatePatternStyles from '../../utils/generatePatternStyles';
 import { useTransformHandler } from '../transform';
 import useColorTransformHandler from '../../elements/shared/useColorTransformHandler';
+import { addInherentPadding } from '../../elements/text/util';
 import {
   getBorderPositionCSS,
   getResponsiveBorder,
@@ -115,7 +116,7 @@ function DisplayElement({ element, previewMode, isAnimatable = false }) {
 
   const wrapperRef = useRef(null);
 
-  const box = getBox(element);
+  const box = getBox(addInherentPadding(element));
 
   useTransformHandler(id, (transform) => {
     const target = wrapperRef.current;

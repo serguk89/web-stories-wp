@@ -13,6 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies
+ */
+import {
+  BACKGROUND_TEXT_MODE,
+  FILL_TEXT_INHERENT_PADDING,
+} from '../../constants';
 
 /**
  * Generates paragraph text style for a text element.
@@ -117,4 +124,16 @@ export function calcFontMetrics(element) {
     contentAreaPx,
     lineBoxPx,
   };
+}
+
+export function addInherentPadding(element) {
+  return element?.backgroundTextMode === BACKGROUND_TEXT_MODE.FILL
+    ? {
+        ...element,
+        x: element.x - FILL_TEXT_INHERENT_PADDING.x,
+        y: element.y - FILL_TEXT_INHERENT_PADDING.y,
+        width: element.width + FILL_TEXT_INHERENT_PADDING.x * 2,
+        height: element.height + FILL_TEXT_INHERENT_PADDING.y * 2,
+      }
+    : element;
 }

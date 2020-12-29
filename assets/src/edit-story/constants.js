@@ -76,3 +76,8 @@ export const FONT_WEIGHT = {
   MEDIUM: 500,
   BOLD: 700,
 };
+
+export const FILL_TEXT_INHERENT_PADDING = {
+  x: 6,
+  y: 4,
+};

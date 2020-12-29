@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
@@ -34,7 +34,10 @@ import {
   elementWithBorder,
 } from '../shared';
 import StoryPropTypes from '../../types';
-import { BACKGROUND_TEXT_MODE } from '../../constants';
+import {
+  BACKGROUND_TEXT_MODE,
+  FILL_TEXT_INHERENT_PADDING,
+} from '../../constants';
 import { useTransformHandler } from '../../components/transform';
 import {
   getHTMLFormatters,
@@ -102,6 +105,17 @@ const FillElement = styled.p`
   ${elementWithTextParagraphStyle}
 `;
 
+const InherentPadding = styled.div`
+  position: absolute;
+  z-index: 1;
+  ${({ inset }) => css`
+    top: ${inset.y}px;
+    right: ${inset.x}px;
+    bottom: ${inset.y}px;
+    left: ${inset.x}px;
+  `};
+`;
+
 const Background = styled.div`
   ${elementWithBackgroundColor}
   ${elementFillContent}
@@ -159,6 +173,13 @@ function TextDisplay({
     ),
     horizontalPadding: dataToEditorX(rest.padding?.horizontal || 0),
     verticalPadding: dataToEditorX(rest.padding?.vertical || 0),
+    inset:
+      element.backgroundTextMode === BACKGROUND_TEXT_MODE.FILL
+        ? {
+            x: dataToEditorX(FILL_TEXT_INHERENT_PADDING.x),
+            y: dataToEditorY(FILL_TEXT_INHERENT_PADDING.y),
+          }
+        : { x: 0, y: 0 },
   };
   const {
     actions: { maybeEnqueueFontStyle },
@@ -269,13 +290,15 @@ function TextDisplay({
       width={elementWidth}
       height={elementHeight}
     >
-      <FillElement
-        ref={fgRef}
-        dangerouslySetInnerHTML={{
-          __html: content,
-        }}
-        {...props}
-      />
+      <InherentPadding {...props}>
+        <FillElement
+          ref={fgRef}
+          dangerouslySetInnerHTML={{
+            __html: content,
+          }}
+          {...props}
+        />
+      </InherentPadding>
     </Background>
   );
 }

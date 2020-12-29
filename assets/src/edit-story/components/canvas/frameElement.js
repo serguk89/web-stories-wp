@@ -32,6 +32,7 @@ import {
   elementWithRotation,
 } from '../../elements/shared';
 import { useUnits } from '../../units';
+import { addInherentPadding } from '../../elements/text/util';
 import WithMask from '../../masks/frame';
 import WithLink from '../elementLink/frame';
 import { useTransformHandler } from '../transform';
@@ -95,7 +96,7 @@ function FrameElement({ element }) {
   }, [id, setNodeForElement]);
   const isSelected = selectedElementIds.includes(id);
   const isSingleElement = selectedElementIds.length === 1;
-  const box = getBox(element);
+  const box = getBox(addInherentPadding(element));
   const isBackground = currentPage?.elements[0].id === id;
 
   const [isTransforming, setIsTransforming] = useState(false);
